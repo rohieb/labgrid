@@ -347,15 +347,15 @@ Used by:
 
 NetworkMXSUSBLoader
 ~~~~~~~~~~~~~~~~~~~
-A NetworkMXSUSBLoader descibes an `MXSUSBLoader`_ available on a remote computer.
+A NetworkMXSUSBLoader describes an `MXSUSBLoader`_ available on a remote computer.
 
 NetworkIMXUSBLoader
 ~~~~~~~~~~~~~~~~~~~
-A NetworkIMXUSBLoader descibes an `IMXUSBLoader`_ available on a remote computer.
+A NetworkIMXUSBLoader describes an `IMXUSBLoader`_ available on a remote computer.
 
 NetworkRKUSBLoader
 ~~~~~~~~~~~~~~~~~~~
-A NetworkRKUSBLoader descibes an `RKUSBLoader`_ available on a remote computer.
+A NetworkRKUSBLoader describes an `RKUSBLoader`_ available on a remote computer.
 
 AndroidFastboot
 ~~~~~~~~~~~~~~~
@@ -570,7 +570,7 @@ Used by:
 
 NetworkFlashRom
 ~~~~~~~~~~~~~~~
-A NetworkFlashrom descibes an `Flashrom`_ available on a remote computer.
+A NetworkFlashrom describes a `Flashrom`_ available on a remote computer.
 
 XenaManager
 ~~~~~~~~~~~
@@ -660,7 +660,7 @@ Used by:
 
 NetworkLXAIOBusPIO
 ~~~~~~~~~~~~~~~~~~
-A NetworkLXAIOBusPIO descibes an `LXAIOBusPIO`_ exported over the network.
+A NetworkLXAIOBusPIO describes an `LXAIOBusPIO`_ exported over the network.
 
 udev Matching
 ~~~~~~~~~~~~~
