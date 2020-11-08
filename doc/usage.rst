@@ -210,10 +210,23 @@ to the resource created above::
   >>> sd.port is rsp
   True
 
-Before the driver can be used, it needs to be activated::
+Driver Activation
+^^^^^^^^^^^^^^^^^
+Before the driver can be used, it needs to be activated.
+On driver activation, labgrid makes sure that all resources needed by the
+driver are available::
 
   >>> t.activate(sd)
   >>> sd.write(b'test')
+
+If a resource is not available (or not available after a certain timeout,
+depending on the driver), the activation will raise an exception, e.g.::
+
+  >>> t.activate(sd)
+  Traceback (most recent call last):
+    File "/usr/lib/python3.8/site-packages/serial/serialposix.py", line 288, in open
+      self.fd = os.open(self.portstr, os.O_RDWR | os.O_NOCTTY | os.O_NONBLOCK)
+  FileNotFoundError: [Errno 2] No such file or directory: '/dev/ttyUSB0'
 
 Active drivers can be accessed by class (any :any:`Driver <labgrid.driver>` or
 :any:`Protocol <labgrid.protocol>`) using some syntactic sugar::
@@ -226,6 +239,31 @@ Active drivers can be accessed by class (any :any:`Driver <labgrid.driver>` or
   >>> target[FakeConsoleDriver, 'console']
   FakeConsoleDriver(target=Target(name='main', …), name='console', …)
 
+Driver Deactivation
+^^^^^^^^^^^^^^^^^^^
+Driver deactivation works in a similar manner::
+
+   >>> t.deactivate(sd)
+
+Drivers need to be deactivated in the following cases:
+
+* Some drivers have internal logic depending on the state of the target.
+  For example, the :any:`ShellDriver` remembers that it has already logged in
+  to the shell.
+  If the target reboots, e.g. through a hardware watchdog timeout,
+  a power cycle, or by issuing a ``reboot`` command on the shell,
+  the ShellDriver's internal state becomes outdated,
+  and the ShellDriver needs to be deactivated and re-activated.
+
+* One of the driver's suppliers is required by another driver which is to be
+  activated.
+  For example, the :any:`ShellDriver` and the :any:`BareboxDriver` both
+  require a :any:`SerialPort` resource.
+  In this case, labgrid will automatically deactivate the BareboxDriver
+  when activating the ShellDriver.
+
+Target Cleanup
+^^^^^^^^^^^^^^
 After you are done with the target, optionally call the cleanup method on your
 target. While labgrid registers an ``atexit`` handler to cleanup targets, this has
 the advantage that exceptions can be handled by your application::
