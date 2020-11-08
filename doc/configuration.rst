@@ -805,6 +805,8 @@ To check if your device has a serial number, you can use ``udevadm info``:
   $ udevadm info /dev/ttyUSB5 | grep SERIAL_SHORT
   E: ID_SERIAL_SHORT=P-00-00679
 
+.. _configuration_drivers:
+
 Drivers
 -------
 

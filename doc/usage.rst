@@ -267,6 +267,42 @@ Drivers need to be deactivated in the following cases:
   In this case, labgrid will automatically deactivate the BareboxDriver
   when activating the ShellDriver.
 
+Multiple Objects of the Same Class
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Sometimes a device has more than one serial console.
+To create drivers that bind to resources of which there are more than one, you
+have to specify a ``name`` parameter when instantiating the resource,
+and use :any:`Target.set_binding_map` to tell the driver which resource to bind to.
+(The respective bindings are documented in the :ref:`Drivers
+<configuration_drivers>` section.)
+For example, here we create two :any:`SerialDriver` instances that each bind to
+a different :any:`RawSerialPort`::
+
+  >>> t = Target("main")
+  >>> rsp1 = RawSerialPort(t, name="shell_port", port="/dev/ttyUSB0")
+  >>> rsp2 = RawSerialPort(t, name="app_port", port="/dev/ttyUSB1")
+  >>> t.set_binding_map({'port': 'shell_port'})
+  >>> shell = SerialDriver(t, name="shell_console")
+  >>> t.set_binding_map({'port': 'app_port'})
+  >>> app = SerialDriver(t, name="app_console")
+
+Note that only the instance names are relevant for the binding, not the names
+of the variables.
+
+With multiple matching active drivers, you have to specify their name in the
+bracket syntax too::
+
+  >>> t.activate(console1)
+  >>> t["ConsoleProtocol"]                  # as above, only one matching entry
+  SerialDriver(target=Target(name='main', env=None), name='console1', state=<BindingState.active: 2>, txdelay=0.0)
+
+  >>> t.activate(console2)
+  >>> t["ConsoleProtocol"]                  # will fail with two active SerialPorts:
+  [...]
+  labgrid.exceptions.NoDriverFoundError: multiple active drivers matching <class 'labgrid.protocol.consoleprotocol.ConsoleProtocol'> found in Target(name='main', env=None) with the same priorities
+  >>> t["ConsoleProtocol", "console2"]      # correct syntax with name
+  SerialDriver(target=Target(name='main', env=None), name='console2', state=<BindingState.active: 2>, txdelay=0.0)
+
 Target Cleanup
 ^^^^^^^^^^^^^^
 After you are done with the target, optionally call the cleanup method on your
