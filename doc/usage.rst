@@ -217,9 +217,12 @@ to the resource created above::
 
 Driver Activation
 ^^^^^^^^^^^^^^^^^
-Before the driver can be used, it needs to be activated.
-On driver activation, labgrid makes sure that all resources needed by the
-driver are available::
+Before the bounded driver can be used, it needs to be activated.
+An activation is an act of the driver consuming the underlying resource on the level of the OS. 
+
+If we use a car analogy, binding is the process of screwing the car together from parts and activation is igniting the engine.
+
+I.e. If a `SerialDriver` is bound to a `RawSerialPort` representing `/dev/ttyUSB0`. An external application could like `minicom` could consume the `/dev/ttyUSB0`. Once the driver is activated, that is no longer possible. ::
 
   >>> t.activate(sd)
   >>> sd.write(b'test')
